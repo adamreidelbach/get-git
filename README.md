@@ -1,3 +1,5 @@
+# A currently in progress rebuild of Get Git. A git tutorial for new developers.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
