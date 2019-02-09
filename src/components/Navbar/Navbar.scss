@@ -1,14 +1,28 @@
 @import '../../variables';
 
 .Navbar {
-  margin: 0 1rem;
+  padding: 0.5rem 1rem;
   color: $dark-blue;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid $dark-blue;
 
-  &__logo {
+  &--dark {
+    padding: 0.5rem 1rem;
+    color: white;
+    background-color: $dark-blue;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo, &__page-title {
     color: $dark-blue;
+    &--dark {
+      color: white;
+    }
   }
 }

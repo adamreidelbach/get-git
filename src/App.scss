@@ -1,9 +1,6 @@
 .App {
   min-width: 768px;
-
-  &__cards {
-    min-width: 768px;
-  }
+  min-height: 100vh;
 
   a:hover {
     text-decoration: none;

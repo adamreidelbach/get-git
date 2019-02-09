@@ -1,0 +1,15 @@
+@import '../../variables';
+
+.NavFooter {
+  color: white;
+  background-color: $dark-blue;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+
+  &__counter {
+    padding: 0 2rem;
+  }
+}

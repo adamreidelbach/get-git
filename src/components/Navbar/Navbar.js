@@ -5,14 +5,16 @@ import './Navbar.scss'
 
 export default function Navbar(props) {
   return (
-    <nav className="Navbar">
+    <nav className={`Navbar${props.darkMode ? '--dark' : ''}`}>
       <div>
-        <Link to='/' className="">
-          <h2 className="Navbar__logo">Get Git</h2>
+        <Link to='/'>
+          <h2 className={`Navbar__logo${props.darkMode ? '--dark' : ''}`}>Get Git</h2>
         </Link>
       </div>
       <div>
-        <h2 className="Navbar__pageTitle">{props.pageTitle}</h2>
+        <Link to='/'>
+          <h2 className={`Navbar__page-title${props.darkMode ? '--dark' : ''}`}>{props.pageTitle}</h2>
+        </Link>
       </div>
       {props.isExercise ?
         <div className="Navbar__question">
@@ -25,7 +27,8 @@ export default function Navbar(props) {
 }
 
 Navbar.propTypes = {
-  pageTitle: PropTypes.string.isRequired
+  pageTitle: PropTypes.string.isRequired,
+  isExercise: PropTypes.bool.isRequired
 };
 
 Navbar.defaultProps = {

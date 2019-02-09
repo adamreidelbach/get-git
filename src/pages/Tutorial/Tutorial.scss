@@ -1,0 +1,82 @@
+@import '../../variables';
+
+.Tutorial {
+  &__row {
+    margin: 0;
+  }
+
+  &__main-row {
+    height: calc(100vh - 7.25rem);
+  }
+
+  &__text-content {
+    padding: 0;
+  }
+
+  &__learn-header, &__instructions-header {
+    background-color: $light-grey;
+    color: $dark-blue;
+    padding-left: 1rem;
+  }
+
+  &__learn-content {
+    padding-left: 1rem;
+  }
+
+  &__instructions-content {
+    padding-left: 2rem;
+  }
+
+  &__console {
+    background-color: $black;
+    padding: 0;
+
+    .input-group-text, .form-control {
+      background-color: $black;
+      border-top: none;
+      border-right: none;
+      border-left: none;
+      border-bottom: 2px solid $dark-grey;
+      color: white;
+    }
+
+    .input-group i {
+      position: absolute;
+      width: 1px;
+      height: 50%;
+      background-color: white;
+      left: 45px;
+      top: 20%;
+      animation-name: blink;
+      animation-duration: 1000ms;
+      animation-iteration-count: infinite;
+      opacity: 1;
+    }
+
+    .input-group input:focus + i {
+        display: none;
+    }
+
+    @keyframes blink {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  }
+
+  &__workflow {
+    background-color: $light-grey;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  &__folder-img {
+    max-width: 5rem;
+  }
+
+  &__workflow-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 0;
+  }
+}
