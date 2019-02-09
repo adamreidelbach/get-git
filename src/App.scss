@@ -1,0 +1,11 @@
+.App {
+  min-width: 768px;
+
+  &__cards {
+    min-width: 768px;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}

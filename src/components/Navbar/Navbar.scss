@@ -1,0 +1,14 @@
+@import '../../variables';
+
+.Navbar {
+  margin: 0 1rem;
+  color: $dark-blue;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  &__logo {
+    color: $dark-blue;
+  }
+}
