@@ -1,0 +1,13 @@
+@import '../../variables';
+
+.Instructions {
+  &__header {
+    background-color: $light-grey;
+    color: $dark-blue;
+    padding-left: 1rem;
+  }
+
+  &__append {
+    padding-left: 2rem;
+  }
+}
