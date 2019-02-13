@@ -3,8 +3,6 @@ import { Col, Form, InputGroup, InputGroupAddon, Input } from 'reactstrap'
 import './Console.scss'
 
 const Console = ({ handleChange, handleSubmit, userAnswer, isCorrectAnswer, terminalText, previousTerminal }) => {
-  console.log('previousTerminal', previousTerminal)
-  console.log('terminalText', terminalText)
   return (
     <Col sm="4" className="Console">
       {previousTerminal &&
