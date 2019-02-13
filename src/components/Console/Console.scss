@@ -3,6 +3,7 @@
 .Console {
   background-color: $black;
   padding: 0;
+  overflow-y: auto;
 
   .input-group-text, .form-control {
     background-color: $black;
@@ -13,34 +14,15 @@
     color: white;
   }
 
-  .input-group i {
-    position: absolute;
-    width: 1px;
-    height: 50%;
-    background-color: white;
-    left: 45px;
-    top: 20%;
-    animation-name: blink;
-    animation-duration: 1000ms;
-    animation-iteration-count: infinite;
-    opacity: 1;
-  }
-
-  .input-group input:focus + i {
-      display: none;
-  }
-
-  @keyframes blink {
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
-
   &__previous-terminal {
     color: white;
+    word-break: break-all;
+    padding: 0;
 
     p {
       margin: 0;
       font-weight: bold;
+      padding-left: 1rem;
     }
   }
 }

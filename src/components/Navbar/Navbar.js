@@ -19,7 +19,7 @@ const Navbar = ({ darkMode, pageTitle, isExercise, hint, isOpen, toggle }) => {
       </div>
       {isExercise ?
         <div className="Navbar__question">
-          <Button id="hint" type="button" className="Navbar__question-mark" disabled>
+          <Button id="hint" type="button" className="Navbar__question-mark">
             ?
           </Button>
           <Popover placement="bottom" isOpen={isOpen} target="hint" toggle={toggle}>

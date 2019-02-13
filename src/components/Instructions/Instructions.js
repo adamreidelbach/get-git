@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 import Task from './childComponents/Task/Task';
-import './Instructions.scss'
+import './Instructions.scss';
 
-const Instructions = ({ instructions, submittedAnswer, append }) => {
-  const lastAnswer = instructions[instructions.length - 1].answer
+const Instructions = ({ instructions, submittedAnswer, append, lastAnswer }) => {
   return (
     <div className="Instructions">
       <h3 className="Instructions__header">Instructions</h3>

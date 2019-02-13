@@ -7,7 +7,7 @@ const Task = ({ instructions, submittedAnswer, answer, command }) => {
     <div className="Task">
       <FormGroup check className="Task__content">
         <Label check key={instructions}>
-          {/* @ToDo - add logic to keep previously correct answer checked */}
+          {/* @todo: add logic to keep previously correct answer checked */}
           <Input type="checkbox" readOnly checked={submittedAnswer === answer ? true : false} />{' '}
           {instructions}
         </Label>

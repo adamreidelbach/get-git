@@ -100,15 +100,7 @@
         {
           "stepNum": 5,
           "learn": "What’s up with this remote and origin? Remote allows us to connect our project to a repository on Github. It tells git where to look. Origin refers to where we are pushing the files from. In this case, we are push directly from the Local Master. Let's keep moving!",
-          "hint1": "",
           "previousTerminal": "<p>ls</p><p>README.md css index.html javascripts</p><p>git init</p><p>Initialized empty Git repository in /Users/myComputer/workspace/myProject/.git/</p><p>git add .</p><p>git commit -m \"file structure complete\"</p><p>[master (root-commit) abc12a1] file structure complete<br>4 files changed, 0 insertions(+), 0 deletions(-)<br>create mode 100644 README.md<br>create mode 100644 css/main.css<br>create mode 100644 index.html<br>create mode 100644 javascripts/main.js</p><p>git remote add origin https://github.com/user/myProject.git</p><p>git push origin master</p><p>Counting objects: 5, done.<br>Delta compression using up to 4 threads.<br>Compressing objects: 100% (2/2), done.<br>Writing objects: 100% (5/5), 395 bytes | 0 bytes/s , done.<br>Total 5 (delta 0), reused 0 (delta 0)<br>To https://github.com/user/myProject.git<br>* [new branch] master -> master</p>",
-          "answer1": "",
-          "answer2": "",
-          "answer3": "",
-          "answer4": "",
-          "answer5": "",
-          "answer6": "",
-          "answer7": "",
           "preStyle1": "#gm",
           "removeOldStyle": "#lm"
         }

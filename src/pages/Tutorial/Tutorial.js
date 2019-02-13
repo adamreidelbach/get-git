@@ -10,19 +10,31 @@ import Console from '../../components/Console/Console';
 
 export class Tutorial extends Component {
   state = {
+    // simply used to navigate between steps of each tutorial
     arrCount: 0,
-    counter: 1,
+    // keep track of steps in NavFooter
+    stepCounter: 1,
+    // keep track of steps in NavFooter
     totalSteps: 1,
+    // inside of the current step, keep track of which task the user is on
+    taskPosition: 0,
+    // user's answer, as they type it
     userAnswer: '',
+    // collect user answer after submitted
     submittedAnswer: '',
-    submitted: false,
+    // of all the tutorials, which one is the user seeing?
     currentTutorial: {},
+    // which step within that tutorial
     currentStep: {},
+    // which task within that step
+    currentTask: {},
     isCorrectAnswer: false,
+    // for question mark popup
     popoverOpen: false
   }
 
   togglePopup = () => {
+    // use setState as function, setState may be batched together, this.state can be unreliable. "Subsequent calls will override values from previous calls in the same cycle, so the quantity will only be incremented once. If the next state depends on the previous state, we recommend using the updater function form, instead"
     this.setState((prevState) => ({
       popoverOpen: !prevState.popoverOpen
     }))
@@ -32,10 +44,11 @@ export class Tutorial extends Component {
     this.setState((prevState) => ({
       userAnswer: '',
       submittedAnswer: '',
-      submitted: false,
-      counter: prevState.counter + 1,
+      stepCounter: prevState.stepCounter + 1,
       arrCount: prevState.arrCount + 1,
       currentStep: prevState.currentTutorial.steps[prevState.arrCount + 1],
+      // @todo: this doesn't seem quite right
+      currentTask: prevState.currentTutorial.steps[prevState.arrCount + 1].instructions[prevState.taskPosition],
       isCorrectAnswer: false
     }));
   }
@@ -44,10 +57,10 @@ export class Tutorial extends Component {
     this.setState((prevState) => ({
       userAnswer: '',
       submittedAnswer: '',
-      submitted: false,
-      counter: prevState.counter - 1,
+      stepCounter: prevState.stepCounter - 1,
       arrCount: prevState.arrCount - 1,
       currentStep: prevState.currentTutorial.steps[prevState.arrCount - 1],
+      currentTask: prevState.currentTutorial.steps[prevState.arrCount - 1].instructions[0],
       isCorrectAnswer: false
     }));
   }
@@ -59,19 +72,25 @@ export class Tutorial extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const answer = this.state.currentStep.instructions.map((instruction) => instruction.answer)
-    const { userAnswer } = this.state;
     // store user's answer and clear the input field
     this.setState({
-      submittedAnswer: userAnswer,
-      submitted: true,
+      submittedAnswer: this.state.userAnswer,
       userAnswer: ''
     })
     // if user's submitted answer matches the correct answer stored inside of instructions.json, set isCorrectAnswer to true
-    if (userAnswer === answer.toString()) {
+    if (this.state.userAnswer === this.state.currentTask.answer) {
       this.setState({
         isCorrectAnswer: true
       })
+    }
+    // if there are more than one tasks inside of the instructions array and the user answers with the correct answer, move to the next task inside of the array
+    // @todo: is this logic totally correct?
+    if (this.state.currentStep.instructions.length > 1 && (this.state.userAnswer === this.state.currentTask.answer)) {
+      this.setState((prevState) => ({
+        taskPosition: prevState.taskPosition + 1,
+        // @todo: this logic is not quite right, it's making the current task move up one, all the time
+        currentTask: prevState.currentTutorial.steps[prevState.arrCount].instructions[prevState.taskPosition + 1]
+      }))
     }
   }
 
@@ -81,30 +100,33 @@ export class Tutorial extends Component {
       .then((res) => {
         // populate current tutorial where tutorial id matches url path
         const currentTutorial = res.exercises.filter(exercise => exercise.id === this.props.match.params.id);
-        console.log('current tutorial', currentTutorial[0])
-        console.log('current step', currentTutorial[0].steps[0])
         // set state with current tutorial, current step within that tutorial (starting with the first one), and the amount of total steps
         this.setState({
           currentTutorial: currentTutorial[0],
           currentStep: currentTutorial[0].steps[0],
-          totalSteps: currentTutorial[0].steps.length
+          totalSteps: currentTutorial[0].steps.length,
+          currentTask: currentTutorial[0].steps[0].instructions === undefined ? {} : currentTutorial[0].steps[0].instructions[0]
         })
       })
       .catch((error) => {
-        console.error('json file not found', error)
+        console.error(error)
       })
   }
 
   render() {
     const { instructions, learn, append, previousTerminal } = this.state.currentStep;
-    const { submittedAnswer, isCorrectAnswer, popoverOpen } = this.state;
-    const terminalText = instructions && instructions.map((instruction) => instruction.terminal)
-    const currentHint = instructions && instructions.map((instruction) => instruction.hint)
-    console.log("current step", instructions);
+    const { submittedAnswer, popoverOpen, isCorrectAnswer } = this.state;
+    console.log("currentTask", this.state.currentTask);
+    const hint = this.state.currentTask === undefined ? '' : this.state.currentTask.hint;
+    const terminal = this.state.currentTask === undefined ? '' : this.state.currentTask.terminal;
+    const lastAnswer = instructions === undefined ? '' : [instructions.length - 1].answer;
+    console.log('current terminal', terminal)
+    console.log('previous terminal', previousTerminal);
 
     return (
       <>
-        <Navbar pageTitle={'Tutorial Name'} darkMode={true} isExercise={true} hint={currentHint} isOpen={popoverOpen} toggle={this.togglePopup} />
+        <Navbar pageTitle={this.state.currentTutorial.id} darkMode={true} isExercise={true} hint={hint} isOpen={popoverOpen} toggle={this.togglePopup} />
+
         <div className="Tutorial">
           <Row className="Tutorial__row Tutorial__main-row">
             <Col sm="4" className="Tutorial__text-content">
@@ -117,6 +139,7 @@ export class Tutorial extends Component {
                   instructions={instructions}
                   submittedAnswer={submittedAnswer}
                   append={append}
+                  lastAnswer={lastAnswer}
                 />
               }
             </Col>
@@ -125,15 +148,15 @@ export class Tutorial extends Component {
               handleSubmit={this.handleSubmit}
               handleChange={this.handleChange}
               userAnswer={this.state.userAnswer}
-              terminalText={terminalText}
-              isCorrectAnswer={isCorrectAnswer}
+              terminalText={terminal}
               previousTerminal={previousTerminal}
+              isCorrectAnswer={isCorrectAnswer}
             />
 
             <Workflow />
           </Row>
         </div>
-        <NavFooter nextStep={this.nextStep} prevStep={this.prevStep} count={this.state.counter} totalSteps={this.state.totalSteps} />
+        <NavFooter nextStep={this.nextStep} prevStep={this.prevStep} count={this.state.stepCounter} totalSteps={this.state.totalSteps} />
       </>
     )
   }
