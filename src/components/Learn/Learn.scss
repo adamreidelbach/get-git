@@ -1,0 +1,13 @@
+@import '../../variables';
+
+.Learn {
+  &__header {
+    background-color: $light-grey;
+    color: $dark-blue;
+    padding-left: 1rem;
+  }
+
+  &__content {
+    padding-left: 1rem;
+  }
+}

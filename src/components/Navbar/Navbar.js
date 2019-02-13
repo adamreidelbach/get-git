@@ -1,24 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Button, Popover, PopoverBody } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './Navbar.scss'
 
-export default function Navbar(props) {
+const Navbar = ({ darkMode, pageTitle, isExercise, hint, isOpen, toggle }) => {
   return (
-    <nav className={`Navbar${props.darkMode ? '--dark' : ''}`}>
+    <nav className={`Navbar${darkMode ? '--dark' : ''}`}>
       <div>
         <Link to='/'>
-          <h2 className={`Navbar__logo${props.darkMode ? '--dark' : ''}`}>Get Git</h2>
+          <h2 className={`Navbar__logo${darkMode ? '--dark' : ''}`}>Get Git</h2>
         </Link>
       </div>
       <div>
         <Link to='/'>
-          <h2 className={`Navbar__page-title${props.darkMode ? '--dark' : ''}`}>{props.pageTitle}</h2>
+          <h2 className={`Navbar__page-title${darkMode ? '--dark' : ''}`}>{pageTitle}</h2>
         </Link>
       </div>
-      {props.isExercise ?
+      {isExercise ?
         <div className="Navbar__question">
-          <h2>?</h2>
+          <Button id="hint" type="button" className="Navbar__question-mark">
+            ?
+          </Button>
+          <Popover placement="bottom" isOpen={isOpen} target="hint" toggle={toggle}>
+            <PopoverBody>{hint}</PopoverBody>
+          </Popover>
         </div> :
         <div></div>
       }
@@ -34,3 +40,5 @@ Navbar.propTypes = {
 Navbar.defaultProps = {
   isExercise: false
 };
+
+export default Navbar;

@@ -9,7 +9,8 @@ class App extends Component {
     return (
       <div className="App" >
         <Route exact path="/" component={Homepage} />
-        <Route path="/exercise/" component={Tutorial} />
+        {/* allow for any id that follows /exercise/ */}
+        <Route path="/exercise/:id" component={Tutorial} />
       </div>
     );
   }

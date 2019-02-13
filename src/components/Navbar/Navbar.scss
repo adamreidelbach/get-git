@@ -25,4 +25,10 @@
       color: white;
     }
   }
+
+  &__question-mark {
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: bold;
+  }
 }

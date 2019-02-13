@@ -1,0 +1,28 @@
+@import '../../variables';
+
+.Console {
+  background-color: $black;
+  padding: 0;
+  overflow-y: auto;
+
+  .input-group-text, .form-control {
+    background-color: $black;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 2px solid $dark-grey;
+    color: white;
+  }
+
+  &__previous-terminal {
+    color: white;
+    word-break: break-all;
+    padding: 0;
+
+    p {
+      margin: 0;
+      font-weight: bold;
+      padding-left: 1rem;
+    }
+  }
+}
