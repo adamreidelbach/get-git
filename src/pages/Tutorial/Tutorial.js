@@ -33,6 +33,10 @@ export class Tutorial extends Component {
     popoverOpen: false
   }
 
+  // @todo: add logic for incorrect answer, and append to terminal
+  // @todo: add logic to handle styling in Workflow component
+  // @todo: add logic to handle inactive attribute to help popup
+
   togglePopup = () => {
     // use setState as function, setState may be batched together, this.state can be unreliable. "Subsequent calls will override values from previous calls in the same cycle, so the quantity will only be incremented once. If the next state depends on the previous state, we recommend using the updater function form, instead"
     this.setState((prevState) => ({
@@ -47,8 +51,7 @@ export class Tutorial extends Component {
       stepCounter: prevState.stepCounter + 1,
       arrCount: prevState.arrCount + 1,
       currentStep: prevState.currentTutorial.steps[prevState.arrCount + 1],
-      // @todo: this doesn't seem quite right
-      currentTask: prevState.currentTutorial.steps[prevState.arrCount + 1].instructions[prevState.taskPosition],
+      currentTask: prevState.currentTutorial.steps[prevState.arrCount + 1].instructions === undefined ? {} : prevState.currentTutorial.steps[prevState.arrCount + 1].instructions[prevState.taskPosition],
       isCorrectAnswer: false
     }));
   }
@@ -83,12 +86,16 @@ export class Tutorial extends Component {
         isCorrectAnswer: true
       })
     }
+    // if the instructions array equals the task position, then reset it back to 0
+    if (this.state.currentStep.instructions.length !== this.state.taskPosition) {
+      this.setState({
+        taskPosition: 0
+      })
+    }
     // if there are more than one tasks inside of the instructions array and the user answers with the correct answer, move to the next task inside of the array
-    // @todo: is this logic totally correct?
     if (this.state.currentStep.instructions.length > 1 && (this.state.userAnswer === this.state.currentTask.answer)) {
       this.setState((prevState) => ({
         taskPosition: prevState.taskPosition + 1,
-        // @todo: this logic is not quite right, it's making the current task move up one, all the time
         currentTask: prevState.currentTutorial.steps[prevState.arrCount].instructions[prevState.taskPosition + 1]
       }))
     }
@@ -116,12 +123,10 @@ export class Tutorial extends Component {
   render() {
     const { instructions, learn, append, previousTerminal } = this.state.currentStep;
     const { submittedAnswer, popoverOpen, isCorrectAnswer } = this.state;
-    console.log("currentTask", this.state.currentTask);
     const hint = this.state.currentTask === undefined ? '' : this.state.currentTask.hint;
     const terminal = this.state.currentTask === undefined ? '' : this.state.currentTask.terminal;
     const lastAnswer = instructions === undefined ? '' : [instructions.length - 1].answer;
-    console.log('current terminal', terminal)
-    console.log('previous terminal', previousTerminal);
+    console.log(this.state.currentTask === undefined ? '' : this.state.currentTask)
 
     return (
       <>
