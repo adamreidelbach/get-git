@@ -5,13 +5,10 @@
     margin: 0;
   }
 
-  &__main-row {
-    height: calc(100vh - 7.25rem);
-  }
-
-  &__text-content {
+  &__learn-section {
     padding: 0;
     overflow-y: auto;
+    height: 85vh;
   }
 
   &__incorrect-answer {

@@ -134,7 +134,7 @@ export class Tutorial extends Component {
 
         <div className="Tutorial">
           <Row className="Tutorial__row Tutorial__main-row">
-            <Col sm="4" className="Tutorial__text-content">
+            <Col sm="4" className="Tutorial__learn-section">
               {learn &&
                 <Learn content={learn} />
               }
