@@ -4,7 +4,7 @@ import { Button, Popover, PopoverBody } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './Navbar.scss'
 
-const Navbar = ({ darkMode, pageTitle, isExercise, hint, isOpen, toggle }) => {
+const Navbar = ({ darkMode, pageTitle, isExercise, currentHint, isOpen, toggle }) => {
   return (
     <nav className={`Navbar${darkMode ? '--dark' : ''}`}>
       <div>
@@ -23,7 +23,7 @@ const Navbar = ({ darkMode, pageTitle, isExercise, hint, isOpen, toggle }) => {
             ?
           </Button>
           <Popover placement="bottom" isOpen={isOpen} target="hint" toggle={toggle}>
-            <PopoverBody>{hint}</PopoverBody>
+            <PopoverBody>{currentHint}</PopoverBody>
           </Popover>
         </div> :
         <div></div>

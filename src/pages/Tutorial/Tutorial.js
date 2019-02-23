@@ -10,6 +10,7 @@ import Console from '../../components/Console/Console';
 
 export class Tutorial extends Component {
   state = {
+    isLoading: false,
     // simply used to navigate between steps of each tutorial
     arrCount: 0,
     // keep track of steps in NavFooter
@@ -28,6 +29,10 @@ export class Tutorial extends Component {
     currentStep: {},
     // which task within that step
     currentTask: {},
+    // current hint, displayed in upper right hand corner
+    currentHint: '',
+    // terminal content if user inputs correct answer
+    currentTerminal: '',
     isCorrectAnswer: false,
     // for question mark popup
     popoverOpen: false
@@ -52,6 +57,8 @@ export class Tutorial extends Component {
       arrCount: prevState.arrCount + 1,
       currentStep: prevState.currentTutorial.steps[prevState.arrCount + 1],
       currentTask: prevState.currentTutorial.steps[prevState.arrCount + 1].instructions === undefined ? {} : prevState.currentTutorial.steps[prevState.arrCount + 1].instructions[prevState.taskPosition],
+      currentHint: prevState.currentTutorial.steps[prevState.arrCount + 1].instructions === undefined ? {} : prevState.currentTutorial.steps[prevState.arrCount + 1].instructions[prevState.hint],
+      currentTerminal: prevState.currentTutorial.steps[prevState.arrCount + 1].instructions === undefined ? {} : prevState.currentTutorial.steps[prevState.arrCount + 1].instructions[prevState.terminal],
       isCorrectAnswer: false
     }));
   }
@@ -64,6 +71,8 @@ export class Tutorial extends Component {
       arrCount: prevState.arrCount - 1,
       currentStep: prevState.currentTutorial.steps[prevState.arrCount - 1],
       currentTask: prevState.currentTutorial.steps[prevState.arrCount - 1].instructions[0],
+      currentHint: prevState.currentTutorial.steps[prevState.arrCount - 1].instructions === undefined ? {} : prevState.currentTutorial.steps[prevState.arrCount - 1].instructions[prevState.hint],
+      currentTerminal: prevState.currentTutorial.steps[prevState.arrCount - 1].instructions === undefined ? {} : prevState.currentTutorial.steps[prevState.arrCount - 1].instructions[prevState.terminal],
       isCorrectAnswer: false
     }));
   }
@@ -103,19 +112,25 @@ export class Tutorial extends Component {
 
   componentWillMount() {
     // get all instructions
+    this.setState({ isLoading: true });
+
     import('../../instructions.json')
       .then((res) => {
         // populate current tutorial where tutorial id matches url path
         const currentTutorial = res.exercises.filter(exercise => exercise.id === this.props.match.params.id);
         // set state with current tutorial, current step within that tutorial (starting with the first one), and the amount of total steps
         this.setState({
+          isLoading: false,
           currentTutorial: currentTutorial[0],
           currentStep: currentTutorial[0].steps[0],
           totalSteps: currentTutorial[0].steps.length,
-          currentTask: currentTutorial[0].steps[0].instructions === undefined ? {} : currentTutorial[0].steps[0].instructions[0]
+          currentTask: currentTutorial[0].steps[0].instructions === undefined ? {} : currentTutorial[0].steps[0].instructions[0],
+          currentHint: currentTutorial[0].steps[0].instructions === undefined ? {} : currentTutorial[0].steps[0].instructions[0].hint,
+          currentTerminal: currentTutorial[0].steps[0].instructions === undefined ? {} : currentTutorial[0].steps[0].instructions[0].terminal,
         })
       })
       .catch((error) => {
+        this.setState({ isLoading: false });
         console.error(error)
       })
   }
@@ -123,46 +138,46 @@ export class Tutorial extends Component {
   render() {
     const { instructions, learn, append, previousTerminal } = this.state.currentStep;
     const { submittedAnswer, popoverOpen, isCorrectAnswer } = this.state;
-    const hint = this.state.currentTask === undefined ? '' : this.state.currentTask.hint;
-    const terminal = this.state.currentTask === undefined ? '' : this.state.currentTask.terminal;
+    // @todo: add lastAnswer to state
     const lastAnswer = instructions === undefined ? '' : [instructions.length - 1].answer;
-    console.log(this.state.currentTask === undefined ? '' : this.state.currentTask)
+    console.log(this.state.currentTask);
 
     return (
-      <>
-        <Navbar pageTitle={this.state.currentTutorial.id} darkMode={true} isExercise={true} hint={hint} isOpen={popoverOpen} toggle={this.togglePopup} />
+      this.state.isLoading ? <p>Loading ... </p> :
+        <>
+          <Navbar pageTitle={this.state.currentTutorial.id} darkMode={true} isExercise={true} currentHint={this.state.currentHint} isOpen={popoverOpen} toggle={this.togglePopup} />
 
-        <div className="Tutorial">
-          <Row className="Tutorial__row Tutorial__main-row">
-            <Col sm="4" className="Tutorial__learn-section">
-              {learn &&
-                <Learn content={learn} />
-              }
+          <div className="Tutorial">
+            <Row className="Tutorial__row Tutorial__main-row">
+              <Col sm="4" className="Tutorial__learn-section">
+                {learn &&
+                  <Learn content={learn} />
+                }
 
-              {instructions &&
-                <Instructions
-                  instructions={instructions}
-                  submittedAnswer={submittedAnswer}
-                  append={append}
-                  lastAnswer={lastAnswer}
-                />
-              }
-            </Col>
+                {instructions &&
+                  <Instructions
+                    instructions={instructions}
+                    submittedAnswer={submittedAnswer}
+                    append={append}
+                    lastAnswer={lastAnswer}
+                  />
+                }
+              </Col>
 
-            <Console
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-              userAnswer={this.state.userAnswer}
-              terminalText={terminal}
-              previousTerminal={previousTerminal}
-              isCorrectAnswer={isCorrectAnswer}
-            />
+              <Console
+                handleSubmit={this.handleSubmit}
+                handleChange={this.handleChange}
+                userAnswer={this.state.userAnswer}
+                currentTerminal={this.state.currentTerminal}
+                previousTerminal={previousTerminal}
+                isCorrectAnswer={isCorrectAnswer}
+              />
 
-            <Workflow />
-          </Row>
-        </div>
-        <NavFooter nextStep={this.nextStep} prevStep={this.prevStep} count={this.state.stepCounter} totalSteps={this.state.totalSteps} />
-      </>
+              <Workflow />
+            </Row>
+          </div>
+          <NavFooter nextStep={this.nextStep} prevStep={this.prevStep} count={this.state.stepCounter} totalSteps={this.state.totalSteps} />
+        </>
     )
   }
 }
